@@ -1993,7 +1993,7 @@ LogMessageFatal::~LogMessageFatal() {
   if (FLAGS_log_backtrace_on_fatal) {
     std::string stacktrace;
     DumpStackTraceToString(&stacktrace);
-    LogDestination::MaybeLogToLogfile(
+    LogDestination::LogToAllLogfiles(
         GLOG_FATAL, timestamp(), stacktrace.c_str(), stacktrace.size());
   }
   Flush();

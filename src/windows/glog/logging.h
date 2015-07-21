@@ -1157,7 +1157,7 @@ public:
       rdbuf(&streambuf_);
     }
 
-#if (_MSC_VER >= 1900)
+#if defined(_MSC_VER) && (_MSC_VER >= 1900)
     LogStream(LogStream&&) = delete;
 #endif
 

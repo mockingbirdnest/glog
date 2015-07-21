@@ -1157,6 +1157,10 @@ public:
       rdbuf(&streambuf_);
     }
 
+#if (_MSC_VER >= 1900)
+    LogStream(LogStream&&) = delete;
+#endif
+
     int ctr() const { return ctr_; }
     void set_ctr(int ctr) { ctr_ = ctr; }
     LogStream* self() const { return self_; }

@@ -134,8 +134,9 @@ static void DumpStackTrace(int skip_count, DebugWriter *writerfn, void *arg) {
 }
 
 static void DumpStackTraceAndExit() {
-  DumpStackTrace(1, DebugWriteToStderr, NULL);
+  DumpStackTrace(4, DebugWriteToStderr, NULL);
 
+#ifndef OS_WINDOWS
   // Set the default signal handler for SIGABRT, to avoid invoking our
   // own signal handler installed by InstallFailedSignalHandler().
   struct sigaction sig_action;
@@ -143,6 +144,7 @@ static void DumpStackTraceAndExit() {
   sigemptyset(&sig_action.sa_mask);
   sig_action.sa_handler = SIG_DFL;
   sigaction(SIGABRT, &sig_action, NULL);
+#endif
 
   abort();
 }

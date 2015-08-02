@@ -130,16 +130,26 @@ typedef unsigned __int64 uint64;
 // Giving it this information can help it optimize for the common case in
 // the absence of better information (ie. -fprofile-arcs).
 //
-#ifndef GOOGLE_PREDICT_BRANCH_NOT_TAKEN
 #if 0
-#define GOOGLE_PREDICT_BRANCH_NOT_TAKEN(x) (__builtin_expect(x, 0))
-#define GOOGLE_PREDICT_FALSE(x) (__builtin_expect(x, 0))
-#define GOOGLE_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+#  ifndef GOOGLE_PREDICT_BRANCH_NOT_TAKEN
+#  define GOOGLE_PREDICT_BRANCH_NOT_TAKEN(x) (__builtin_expect(x, 0))
+#  endif
+#  ifndef GOOGLE_PREDICT_FALSE
+#  define GOOGLE_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+#  endif
+#  ifndef GOOGLE_PREDICT_TRUE
+#  define GOOGLE_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+#  endif
 #else
-#define GOOGLE_PREDICT_BRANCH_NOT_TAKEN(x) x
-#define GOOGLE_PREDICT_FALSE(x) x
-#define GOOGLE_PREDICT_TRUE(x) x
-#endif
+#  ifndef GOOGLE_PREDICT_BRANCH_NOT_TAKEN
+#  define GOOGLE_PREDICT_BRANCH_NOT_TAKEN(x) x
+#  endif
+#  ifndef GOOGLE_PREDICT_FALSE
+#  define GOOGLE_PREDICT_FALSE(x) x
+#  endif
+#  ifndef GOOGLE_PREDICT_TRUE
+#  define GOOGLE_PREDICT_TRUE(x) x
+#  endif
 #endif
 
 // Make a bunch of macros for logging.  The way to log things is to stream
@@ -496,6 +506,8 @@ namespace google {
 // Initialize google's logging library. You will see the program name
 // specified by argv0 in log outputs.
 GOOGLE_GLOG_DLL_DECL void InitGoogleLogging(const char* argv0);
+
+GOOGLE_GLOG_DLL_DECL bool IsGoogleLoggingInitialized();
 
 // Shutdown google's logging library.
 GOOGLE_GLOG_DLL_DECL void ShutdownGoogleLogging();
@@ -1155,7 +1167,19 @@ public:
     char* str() const { return pbase(); }
 
   private:
+    // LogStream inherit from non-DLL-exported class (std::ostrstream)
+    // and VC++ produces a warning for this situation.
+    // However, MSDN says "C4251 can be ignored if you are deriving from a type
+    // in the Standard C++ Library"
+    // http://msdn.microsoft.com/en-us/library/esew7y1w.aspx
+    // Let's just ignore the warning.
+#ifdef _MSC_VER
+# pragma warning(disable: 4251)
+#endif
     base_logging::LogStreamBuf streambuf_;
+#ifdef _MSC_VER
+# pragma warning(default: 4251)
+#endif
     int ctr_;  // Counter hack (for the LOG_EVERY_X() macro)
     LogStream *self_;  // Consistency check hack
   };
@@ -1232,6 +1256,9 @@ public:
   static int64 num_messages(int severity);
 
   struct LogMessageData;
+
+protected:
+  time_t timestamp() const;
 
 private:
   // Fully internal SendMethod cases:

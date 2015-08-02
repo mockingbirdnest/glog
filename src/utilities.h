@@ -110,6 +110,8 @@
 #  define STACKTRACE_H "stacktrace_x86_64-inl.h"
 # elif (defined(__ppc__) || defined(__PPC__)) && __GNUC__ >= 2
 #  define STACKTRACE_H "stacktrace_powerpc-inl.h"
+# elif (defined(OS_WINDOWS))
+#  define STACKTRACE_H "stacktrace_win-inl.h"
 # endif
 #endif
 
@@ -126,6 +128,8 @@
 # define HAVE_SYMBOLIZE
 #elif defined(OS_MACOSX) && defined(HAVE_DLADDR)
 // Use dladdr to symbolize.
+# define HAVE_SYMBOLIZE
+#elif defined(OS_WINDOWS)
 # define HAVE_SYMBOLIZE
 #endif
 

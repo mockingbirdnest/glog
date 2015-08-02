@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{34BD04BD-BC1D-4BFC-AAFC-ED02D9E960F1}</ProjectGuid>
+    <RootNamespace>libglog</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\include_chromium.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\include_chromium.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\windows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBGLOG_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\src\windows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBGLOG_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\chromium\base\debug\stack_trace.cc" />
+    <ClCompile Include="..\..\..\chromium\base\debug\stack_trace_win.cc" />
+    <ClCompile Include="..\..\..\chromium\base\files\file_path.cc" />
+    <ClCompile Include="..\..\..\chromium\base\files\file_path_constants.cc" />
+    <ClCompile Include="..\..\..\chromium\base\memory\singleton.cc" />
+    <ClCompile Include="..\..\..\chromium\base\process\launch_win.cc" />
+    <ClCompile Include="..\..\..\chromium\base\strings\string_piece.cc" />
+    <ClCompile Include="..\..\..\chromium\base\strings\string_util.cc" />
+    <ClCompile Include="..\..\..\chromium\base\strings\string_util_constants.cc" />
+    <ClCompile Include="..\..\..\chromium\base\synchronization\lock.cc" />
+    <ClCompile Include="..\..\..\chromium\base\synchronization\lock_impl_win.cc" />
+    <ClCompile Include="..\..\..\chromium\base\threading\platform_thread_win.cc" />
+    <ClCompile Include="..\..\src\logging.cc" />
+    <ClCompile Include="..\..\src\raw_logging.cc" />
+    <ClCompile Include="..\..\src\symbolize.cc" />
+    <ClCompile Include="..\..\src\utilities.cc" />
+    <ClCompile Include="..\..\src\vlog_is_on.cc" />
+    <ClCompile Include="..\..\src\windows\port.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\chromium\base\atomicops.h" />
+    <ClInclude Include="..\..\..\chromium\base\base_export.h" />
+    <ClInclude Include="..\..\..\chromium\base\basictypes.h" />
+    <ClInclude Include="..\..\..\chromium\base\compiler_specific.h" />
+    <ClInclude Include="..\..\..\chromium\base\debug\stack_trace.h" />
+    <ClInclude Include="..\..\..\chromium\base\files\file_path.h" />
+    <ClInclude Include="..\..\..\chromium\base\macros.h" />
+    <ClInclude Include="..\..\..\chromium\base\memory\aligned_memory.h" />
+    <ClInclude Include="..\..\..\chromium\base\memory\singleton.h" />
+    <ClInclude Include="..\..\..\chromium\base\port.h" />
+    <ClInclude Include="..\..\..\chromium\base\process\launch.h" />
+    <ClInclude Include="..\..\..\chromium\base\strings\string16.h" />
+    <ClInclude Include="..\..\..\chromium\base\strings\string_piece.h" />
+    <ClInclude Include="..\..\..\chromium\base\strings\string_util.h" />
+    <ClInclude Include="..\..\..\chromium\base\strings\string_util_win.h" />
+    <ClInclude Include="..\..\..\chromium\base\synchronization\lock.h" />
+    <ClInclude Include="..\..\..\chromium\base\synchronization\lock_impl.h" />
+    <ClInclude Include="..\..\..\chromium\base\third_party\dynamic_annotations\dynamic_annotations.h" />
+    <ClInclude Include="..\..\..\chromium\base\threading\platform_thread.h" />
+    <ClInclude Include="..\..\..\chromium\build\build_config.h" />
+    <ClInclude Include="..\..\src\base\commandlineflags.h" />
+    <ClInclude Include="..\..\src\base\googleinit.h" />
+    <ClInclude Include="..\..\src\base\mutex.h" />
+    <ClInclude Include="..\..\src\stacktrace.h" />
+    <ClInclude Include="..\..\src\stacktrace_win-inl.h" />
+    <ClInclude Include="..\..\src\symbolize.h" />
+    <ClInclude Include="..\..\src\utilities.h" />
+    <ClInclude Include="..\..\src\windows\config.h" />
+    <ClInclude Include="..\..\src\windows\glog\logging.h" />
+    <ClInclude Include="..\..\src\windows\glog\log_severity.h" />
+    <ClInclude Include="..\..\src\windows\glog\raw_logging.h" />
+    <ClInclude Include="..\..\src\windows\glog\stl_logging.h" />
+    <ClInclude Include="..\..\src\windows\glog\vlog_is_on.h" />
+    <ClInclude Include="..\..\src\windows\port.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

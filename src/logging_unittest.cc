@@ -61,6 +61,7 @@ DECLARE_string(log_backtrace_at);  // logging.cc
 
 #ifdef HAVE_LIB_GFLAGS
 #include <gflags/gflags.h>
+using namespace GFLAGS_NAMESPACE;
 #endif
 
 #ifdef HAVE_LIB_GMOCK
@@ -1058,8 +1059,9 @@ TEST(Strerror, logging) {
   CHECK_STREQ(buf, "");
   CHECK_EQ(posix_strerror_r(errcode, buf, buf_size), 0);
   CHECK_STREQ(buf, msg);
-  free(msg);
   delete[] buf;
+  CHECK_EQ(msg, StrError(errcode));
+  free(msg);
 }
 
 // Simple routines to look at the sizes of generated code for LOG(FATAL) and

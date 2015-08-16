@@ -1,8 +1,8 @@
-#OS junk files
+# OS Files
 [Tt]humbs.db
 *.DS_Store
 
-#Visual Studio files
+# Visual Studio Files
 *.[Oo]bj
 *.user
 *.aps
@@ -29,45 +29,17 @@ ipch/
 [Bb]in
 [Dd]ebug*/
 [Rr]elease*/
-Ankh.NoLoad
 
-#MonoDevelop
-*.pidb
-*.userprefs
-
-#Tooling
-_ReSharper*/
-*.resharper
-[Tt]est[Rr]esult*
-*.sass-cache
-
-#Project files
+# Project Files
 [Bb]uild/
 
-#Subversion files
-.svn
-
-# Office Temp Files
+# Office Temporary Files
 ~$*
 
-# vim Temp Files
+# vim Temporary Files
 *~
 
-#NuGet
-packages/
-*.nupkg
-
-#ncrunch
-*ncrunch*
-*crunch*.local.xml
-
-# visual studio database projects
-*.dbmdl
-
-#Test files
-*.testsettings
-
-#LaTeX stuff
+# LaTeX Files
 *.aux
 *.glo
 *.idx
@@ -92,3 +64,9 @@ packages/
 *.out
 *.synctex.gz
 *.thm
+
+# Linux Files
+autom4te.cache
+glog-*.tar.gz
+packages/rpm-unknown
+packages/debian-*

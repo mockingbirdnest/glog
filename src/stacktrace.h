@@ -53,7 +53,7 @@ _START_GOOGLE_NAMESPACE_
 //           ....       ...
 //
 // "result" must not be NULL.
-extern int GetStackTrace(void** result, int max_depth, int skip_count);
+extern size_t GetStackTrace(void** result, size_t max_depth, int skip_count);
 
 _END_GOOGLE_NAMESPACE_
 

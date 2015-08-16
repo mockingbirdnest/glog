@@ -7,7 +7,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\chromium;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NOGDI;NOMINMAX;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ShowIncludes>true</ShowIncludes>
     </ClCompile>
     <Link>
       <AdditionalDependencies>dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>

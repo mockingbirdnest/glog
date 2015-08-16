@@ -84,7 +84,7 @@ static inline string GetTempDir() {
 #if defined(OS_WINDOWS) && defined(_MSC_VER) && !defined(TEST_SRC_DIR)
 // The test will run in glog/vsproject/<project name>
 // (e.g., glog/vsproject/logging_unittest).
-static const char TEST_SRC_DIR[] = "../..";
+static const char TEST_SRC_DIR[] = SOLUTION_DIR;
 #elif !defined(TEST_SRC_DIR)
 # warning TEST_SRC_DIR should be defined in config.h
 static const char TEST_SRC_DIR[] = ".";

@@ -91,7 +91,7 @@ static void **NextStackFrame(void **old_sp) {
 }
 
 // If you change this function, also change GetStackFrames below.
-int GetStackTrace(void** result, int max_depth, int skip_count) {
+size_t GetStackTrace(void** result, size_t max_depth, int skip_count) {
   void **sp;
 #ifdef __i386__
   // Stack frame format:

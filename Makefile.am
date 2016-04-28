@@ -199,7 +199,7 @@ libglog_la_SOURCES = $(gloginclude_HEADERS) \
 nodist_libglog_la_SOURCES = $(nodist_gloginclude_HEADERS)
 
 libglog_la_CXXFLAGS = $(PTRHEAD_CFLAGS) $(GFLAGS_CFLAGS) $(MINGW_CFLAGS) \
-                      $(AM_CXXFLAGS) -DNDEBUG
+                      $(AM_CXXFLAGS) -DNDEBUG -fPIC
 libglog_la_LDFLAGS = $(PTRHEAD_CFLAGS) $(GFLAGS_LDFLAGS)
 libglog_la_LIBADD = $(COMMON_LIBS)
 

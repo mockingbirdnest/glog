@@ -84,7 +84,7 @@ static _Unwind_Reason_Code GetOneFrame(struct _Unwind_Context *uc, void *opq) {
 }
 
 // If you change this function, also change GetStackFrames below.
-size_t GetStackTrace(void** result, size_t max_depth, int skip_count) {
+size_t GetStackTrace(void** result, size_t max_depth, size_t skip_count) {
   if (!ready_to_run)
     return 0;
 

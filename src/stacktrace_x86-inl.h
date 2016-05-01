@@ -91,7 +91,7 @@ static void **NextStackFrame(void **old_sp) {
 }
 
 // If you change this function, also change GetStackFrames below.
-size_t GetStackTrace(void** result, size_t max_depth, int skip_count) {
+size_t GetStackTrace(void** result, size_t max_depth, size_t skip_count) {
   void **sp;
 #ifdef __i386__
   // Stack frame format:
@@ -118,7 +118,7 @@ size_t GetStackTrace(void** result, size_t max_depth, int skip_count) {
   sp = (void **) rbp;
 #endif
 
-  int n = 0;
+  size_t n = 0;
   while (sp && n < max_depth) {
     if (*(sp+1) == (void *)0) {
       // In 64-bit code, we often see a frame that

@@ -74,7 +74,7 @@ void StacktracePowerPCDummyFunction() __attribute__((noinline));
 void StacktracePowerPCDummyFunction() { __asm__ volatile(""); }
 
 // If you change this function, also change GetStackFrames below.
-size_t GetStackTrace(void** result, size_t max_depth, int skip_count) {
+size_t GetStackTrace(void** result, size_t max_depth, size_t skip_count) {
   void **sp;
   // Apple OS X uses an old version of gnu as -- both Darwin 7.9.0 (Panther)
   // and Darwin 8.8.1 (Tiger) use as 1.38.  This means we have to use a
@@ -98,7 +98,7 @@ size_t GetStackTrace(void** result, size_t max_depth, int skip_count) {
   // The LR save area is used by the callee, so the top entry is bogus.
   skip_count++;
 
-  int n = 0;
+  size_t n = 0;
   while (sp && n < max_depth) {
     if (skip_count > 0) {
       skip_count--;

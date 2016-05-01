@@ -52,9 +52,9 @@ _START_GOOGLE_NAMESPACE_
 static bool g_now_entering = false;
 
 // If you change this function, also change GetStackFrames below.
-size_t GetStackTrace(void** result, size_t max_depth, int skip_count) {
+size_t GetStackTrace(void** result, size_t max_depth, size_t skip_count) {
   void *ip;
-  int n = 0;
+  size_t n = 0;
   unw_cursor_t cursor;
   unw_context_t uc;
 

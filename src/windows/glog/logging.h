@@ -52,14 +52,6 @@
 #endif
 #include <vector>
 
-// Annoying stuff for windows -- makes sure clients can import these functions
-#ifndef GOOGLE_GLOG_DLL_DECL
-# if defined(_WIN32) && !defined(__CYGWIN__)
-#   define GOOGLE_GLOG_DLL_DECL  __declspec(dllimport)
-# else
-#   define GOOGLE_GLOG_DLL_DECL
-# endif
-#endif
 #if defined(_MSC_VER)
 #define GLOG_MSVC_PUSH_DISABLE_WARNING(n) __pragma(warning(push)) \
                                      __pragma(warning(disable:n))
@@ -67,6 +59,15 @@
 #else
 #define GLOG_MSVC_PUSH_DISABLE_WARNING(n)
 #define GLOG_MSVC_POP_WARNING()
+#endif
+
+// Annoying stuff for windows -- makes sure clients can import these functions
+#ifndef GOOGLE_GLOG_DLL_DECL
+# if defined(_WIN32) && !defined(__CYGWIN__)
+#   define GOOGLE_GLOG_DLL_DECL  __declspec(dllimport)
+# else
+#   define GOOGLE_GLOG_DLL_DECL
+# endif
 #endif
 
 // We care a lot about number of bits things take up.  Unfortunately,
@@ -130,27 +131,30 @@ typedef unsigned __int64 uint64;
 // Giving it this information can help it optimize for the common case in
 // the absence of better information (ie. -fprofile-arcs).
 //
+#ifndef GOOGLE_PREDICT_BRANCH_NOT_TAKEN
 #if 0
-#  ifndef GOOGLE_PREDICT_BRANCH_NOT_TAKEN
-#  define GOOGLE_PREDICT_BRANCH_NOT_TAKEN(x) (__builtin_expect(x, 0))
-#  endif
-#  ifndef GOOGLE_PREDICT_FALSE
-#  define GOOGLE_PREDICT_FALSE(x) (__builtin_expect(x, 0))
-#  endif
-#  ifndef GOOGLE_PREDICT_TRUE
-#  define GOOGLE_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
-#  endif
+#define GOOGLE_PREDICT_BRANCH_NOT_TAKEN(x) (__builtin_expect(x, 0))
 #else
-#  ifndef GOOGLE_PREDICT_BRANCH_NOT_TAKEN
-#  define GOOGLE_PREDICT_BRANCH_NOT_TAKEN(x) x
-#  endif
-#  ifndef GOOGLE_PREDICT_FALSE
-#  define GOOGLE_PREDICT_FALSE(x) x
-#  endif
-#  ifndef GOOGLE_PREDICT_TRUE
-#  define GOOGLE_PREDICT_TRUE(x) x
-#  endif
+#define GOOGLE_PREDICT_BRANCH_NOT_TAKEN(x) x
 #endif
+#endif
+
+#ifndef GOOGLE_PREDICT_FALSE
+#if 0
+#define GOOGLE_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+#else
+#define GOOGLE_PREDICT_FALSE(x) x
+#endif
+#endif
+
+#ifndef GOOGLE_PREDICT_TRUE
+#if 0
+#define GOOGLE_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+#else
+#define GOOGLE_PREDICT_TRUE(x) x
+#endif
+#endif
+
 
 // Make a bunch of macros for logging.  The way to log things is to stream
 // things to LOG(<a particular severity level>).  E.g.,
@@ -361,6 +365,9 @@ DECLARE_int32(minloglevel);
 // default logging directory.
 DECLARE_string(log_dir);
 
+// Set the log file mode.
+DECLARE_int32(logfile_mode);
+
 // Sets the path of the directory into which to put additional links
 // to the log files.
 DECLARE_string(log_link);
@@ -558,7 +565,7 @@ class LogSink;  // defined below
 //   vector<string> *outvec;
 // The cast is to disambiguate NULL arguments.
 #define LOG_STRING(severity, outvec) \
-  LOG_TO_STRING_##severity(static_cast<vector<string>*>(outvec)).stream()
+  LOG_TO_STRING_##severity(static_cast<std::vector<std::string>*>(outvec)).stream()
 
 #define LOG_IF(severity, condition) \
   !(condition) ? (void) 0 : google::LogMessageVoidify() & LOG(severity)
@@ -726,10 +733,10 @@ DEFINE_CHECK_OP_IMPL(Check_GT, > )
 // to reduce the overhead of CHECK statments by 2x.
 // Real DCHECK-heavy tests have seen 1.5x speedups.
 
-// The meaning of "string" might be different between now and 
+// The meaning of "string" might be different between now and
 // when this macro gets invoked (e.g., if someone is experimenting
 // with other string implementations that get defined after this
-// file is included).  Save the current meaning now and use it 
+// file is included).  Save the current meaning now and use it
 // in the macro.
 typedef std::string _Check_string;
 #define CHECK_OP_LOG(name, op, val1, val2, log)                         \
@@ -922,6 +929,9 @@ template <bool>
 struct CompileAssert {
 };
 struct CrashReason;
+
+// Returns true if FailureSignalHandler is installed.
+bool IsFailureSignalHandlerInstalled();
 }  // namespace glog_internal_namespace_
 
 #define GOOGLE_GLOG_COMPILE_ASSERT(expr, msg) \
@@ -1180,6 +1190,8 @@ public:
 #ifdef _MSC_VER
 # pragma warning(disable: 4251)
 #endif
+    LogStream(const LogStream&);
+    LogStream& operator=(const LogStream&);
     base_logging::LogStreamBuf streambuf_;
 #ifdef _MSC_VER
 # pragma warning(default: 4251)
@@ -1250,7 +1262,7 @@ public:
   void SendToSyslogAndLog();  // Actually dispatch to syslog and the logs
 
   // Call abort() or similar to perform LOG(FATAL) crash.
-  static void Fail() ;
+  static void  Fail();
 
   std::ostream& stream();
 
@@ -1301,7 +1313,7 @@ class GOOGLE_GLOG_DLL_DECL LogMessageFatal : public LogMessage {
  public:
   LogMessageFatal(const char* file, int line);
   LogMessageFatal(const char* file, int line, const CheckOpString& result);
-  ~LogMessageFatal() ;
+   ~LogMessageFatal();
 };
 
 // A non-macro interface to the log facility; (useful
@@ -1605,7 +1617,7 @@ class GOOGLE_GLOG_DLL_DECL NullStreamFatal : public NullStream {
   NullStreamFatal() { }
   NullStreamFatal(const char* file, int line, const CheckOpString& result) :
       NullStream(file, line, result) { }
-   ~NullStreamFatal() { _exit(1); }
+   ~NullStreamFatal() throw () { _exit(1); }
 };
 
 // Install a signal handler that will dump signal information and a stack

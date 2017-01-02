@@ -31,8 +31,6 @@ option (WITH_THREADS "Enable multithreading support" ON)
 
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-include (CMakePackageConfigHelpers)
-include (CPack)
 include (CheckCSourceCompiles)
 include (CheckCXXCompilerFlag)
 include (CheckCXXSourceCompiles)
@@ -43,6 +41,9 @@ include (CheckLibraryExists)
 include (CheckStructHasMember)
 include (CheckSymbolExists)
 include (CheckTypeSize)
+include (CMakePackageConfigHelpers)
+include (CPack)
+include (CTest)
 include (DetermineGflagsNamespace)
 
 set (CMAKE_THREAD_PREFER_PTHREAD 1)
@@ -101,8 +102,14 @@ check_function_exists (pwrite HAVE_PWRITE)
 check_function_exists (sigaction HAVE_SIGACTION)
 check_function_exists (sigaltstack HAVE_SIGALSTACK)
 
-check_cxx_compiler_flag (-Wno-deprecated HAVE_NO_DEPRECATED)
-check_cxx_compiler_flag (-Wno-unnamed-type-template-args
+# NOTE gcc does not fail if you pass a non-existent -Wno-* option as an
+# argument. However, it will happily fail if you pass the corresponding -W*
+# option. So, we check whether options that disable warnings exist by testing
+# the availability of the corresponding option that enables the warning. This
+# eliminates the need to check for compiler for several (mainly Clang) options.
+
+check_cxx_compiler_flag (-Wdeprecated HAVE_NO_DEPRECATED)
+check_cxx_compiler_flag (-Wunnamed-type-template-args
     HAVE_NO_UNNAMED_TYPE_TEMPLATE_ARGS)
 
 # NOTE: Cannot use check_function_exists here since >=vc-14.0 can define
@@ -368,25 +375,29 @@ if (WIN32)
   )
 endif (WIN32)
 
+add_compile_options ($<$<BOOL:${HAVE_NO_UNNAMED_TYPE_TEMPLATE_ARGS}>:-Wno-unnamed-type-template-args>)
+
 add_library (glog
   ${GLOG_SRCS}
 )
 
+set_target_properties (glog PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 if (UNWIND_LIBRARY)
   target_link_libraries (glog PUBLIC ${UNWIND_LIBRARY})
 endif (UNWIND_LIBRARY)
+
+if (HAVE_PTHREAD)
+  target_link_libraries (glog PUBLIC ${CMAKE_THREAD_LIBS_INIT})
+endif (HAVE_PTHREAD)
 
 if (WIN32 AND HAVE_SNPRINTF)
   set_property (SOURCE src/windows/port.cc APPEND PROPERTY COMPILE_DEFINITIONS
     HAVE_SNPRINTF)
 endif (WIN32 AND HAVE_SNPRINTF)
 
-if (HAVE_NO_UNNAMED_TYPE_TEMPLATE_ARGS)
-  target_compile_options (glog PUBLIC -Wno-unnamed-type-template-args)
-endif (HAVE_NO_UNNAMED_TYPE_TEMPLATE_ARGS)
-
 if (gflags_FOUND)
-  target_include_directories (glog PUBLIC ${gflags_INCLUDE_DIR})
+  target_include_directories (glog PUBLIC $<BUILD_INTERFACE:${gflags_INCLUDE_DIR}>)
   target_link_libraries (glog PUBLIC ${gflags_LIBRARIES})
 
   if (NOT BUILD_SHARED_LIBS)
@@ -407,6 +418,7 @@ set_target_properties (glog PROPERTIES PUBLIC_HEADER "${GLOG_PUBLIC_H}")
 target_include_directories (glog BEFORE PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>"
+  "$<INSTALL_INTERFACE:include>"
   PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -449,95 +461,97 @@ endif (UNIX OR (APPLE AND HAVE_DLADDR))
 
 # Unit testing
 
-add_executable (logging_unittest
-  src/logging_unittest.cc
-)
-
-target_link_libraries (logging_unittest PRIVATE glog)
-
-add_executable (stl_logging_unittest
-  src/stl_logging_unittest.cc
-)
-
-target_link_libraries (stl_logging_unittest PRIVATE glog)
-
-if (HAVE_NO_DEPRECATED)
-  set_property (TARGET stl_logging_unittest APPEND PROPERTY COMPILE_OPTIONS
-    -Wno-deprecated)
-endif (HAVE_NO_DEPRECATED)
-
-if (HAVE_UNORDERED_MAP AND HAVE_UNORDERED_SET)
-  target_compile_definitions (stl_logging_unittest PRIVATE
-    GLOG_STL_LOGGING_FOR_UNORDERED)
-endif (HAVE_UNORDERED_MAP AND HAVE_UNORDERED_SET)
-
-if (HAVE_TR1_UNORDERED_MAP AND HAVE_TR1_UNORDERED_SET)
-  target_compile_definitions (stl_logging_unittest PRIVATE
-    GLOG_STL_LOGGING_FOR_TR1_UNORDERED)
-endif (HAVE_TR1_UNORDERED_MAP AND HAVE_TR1_UNORDERED_SET)
-
-if (HAVE_EXT_HASH_MAP AND HAVE_EXT_HASH_SET)
-  target_compile_definitions (stl_logging_unittest PRIVATE
-    GLOG_STL_LOGGING_FOR_EXT_HASH)
-endif (HAVE_EXT_HASH_MAP AND HAVE_EXT_HASH_SET)
-
-if (HAVE_EXT_SLIST)
-  target_compile_definitions (stl_logging_unittest PRIVATE
-    GLOG_STL_LOGGING_FOR_EXT_SLIST)
-endif (HAVE_EXT_SLIST)
-
-if (HAVE_SYMBOLIZE)
-  add_executable (symbolize_unittest
-    src/symbolize_unittest.cc
+if (BUILD_TESTING)
+  add_executable (logging_unittest
+    src/logging_unittest.cc
   )
 
-  target_link_libraries (symbolize_unittest PRIVATE glog)
-endif (HAVE_SYMBOLIZE)
+  target_link_libraries (logging_unittest PRIVATE glog)
 
-add_executable (demangle_unittest
-  src/demangle_unittest.cc
-)
-
-target_link_libraries (demangle_unittest PRIVATE glog)
-
-if (HAVE_STACKTRACE)
-  add_executable (stacktrace_unittest
-    src/stacktrace_unittest.cc
+  add_executable (stl_logging_unittest
+    src/stl_logging_unittest.cc
   )
 
-  target_link_libraries (stacktrace_unittest PRIVATE glog)
-endif (HAVE_STACKTRACE)
+  target_link_libraries (stl_logging_unittest PRIVATE glog)
 
-add_executable (utilities_unittest
-  src/utilities_unittest.cc
-)
+  if (HAVE_NO_DEPRECATED)
+    set_property (TARGET stl_logging_unittest APPEND PROPERTY COMPILE_OPTIONS
+      -Wno-deprecated)
+  endif (HAVE_NO_DEPRECATED)
 
-target_link_libraries (utilities_unittest PRIVATE glog)
+  if (HAVE_UNORDERED_MAP AND HAVE_UNORDERED_SET)
+    target_compile_definitions (stl_logging_unittest PRIVATE
+      GLOG_STL_LOGGING_FOR_UNORDERED)
+  endif (HAVE_UNORDERED_MAP AND HAVE_UNORDERED_SET)
 
-if (HAVE_STACKTRACE AND HAVE_SYMBOLIZE)
-  add_executable (signalhandler_unittest
-    src/signalhandler_unittest.cc
+  if (HAVE_TR1_UNORDERED_MAP AND HAVE_TR1_UNORDERED_SET)
+    target_compile_definitions (stl_logging_unittest PRIVATE
+      GLOG_STL_LOGGING_FOR_TR1_UNORDERED)
+  endif (HAVE_TR1_UNORDERED_MAP AND HAVE_TR1_UNORDERED_SET)
+
+  if (HAVE_EXT_HASH_MAP AND HAVE_EXT_HASH_SET)
+    target_compile_definitions (stl_logging_unittest PRIVATE
+      GLOG_STL_LOGGING_FOR_EXT_HASH)
+  endif (HAVE_EXT_HASH_MAP AND HAVE_EXT_HASH_SET)
+
+  if (HAVE_EXT_SLIST)
+    target_compile_definitions (stl_logging_unittest PRIVATE
+      GLOG_STL_LOGGING_FOR_EXT_SLIST)
+  endif (HAVE_EXT_SLIST)
+
+  if (HAVE_SYMBOLIZE)
+    add_executable (symbolize_unittest
+      src/symbolize_unittest.cc
+    )
+
+    target_link_libraries (symbolize_unittest PRIVATE glog)
+  endif (HAVE_SYMBOLIZE)
+
+  add_executable (demangle_unittest
+    src/demangle_unittest.cc
   )
 
-  target_link_libraries (signalhandler_unittest PRIVATE glog)
-endif (HAVE_STACKTRACE AND HAVE_SYMBOLIZE)
+  target_link_libraries (demangle_unittest PRIVATE glog)
 
-add_test (NAME demangle COMMAND demangle_unittest)
-add_test (NAME logging COMMAND logging_unittest)
+  if (HAVE_STACKTRACE)
+    add_executable (stacktrace_unittest
+      src/stacktrace_unittest.cc
+    )
 
-if (TARGET signalhandler_unittest)
-  add_test (NAME signalhandler COMMAND signalhandler_unittest)
-endif (TARGET signalhandler_unittest)
+    target_link_libraries (stacktrace_unittest PRIVATE glog)
+  endif (HAVE_STACKTRACE)
 
-if (TARGET stacktrace_unittest)
-  add_test (NAME stacktrace COMMAND stacktrace_unittest)
-endif (TARGET stacktrace_unittest)
+  add_executable (utilities_unittest
+    src/utilities_unittest.cc
+  )
 
-add_test (NAME stl_logging COMMAND stl_logging_unittest)
+  target_link_libraries (utilities_unittest PRIVATE glog)
 
-if (TARGET symbolize_unittest)
-  add_test (NAME symbolize COMMAND symbolize_unittest)
-endif (TARGET symbolize_unittest)
+  if (HAVE_STACKTRACE AND HAVE_SYMBOLIZE)
+    add_executable (signalhandler_unittest
+      src/signalhandler_unittest.cc
+    )
+
+    target_link_libraries (signalhandler_unittest PRIVATE glog)
+  endif (HAVE_STACKTRACE AND HAVE_SYMBOLIZE)
+
+  add_test (NAME demangle COMMAND demangle_unittest)
+  add_test (NAME logging COMMAND logging_unittest)
+
+  if (TARGET signalhandler_unittest)
+    add_test (NAME signalhandler COMMAND signalhandler_unittest)
+  endif (TARGET signalhandler_unittest)
+
+  if (TARGET stacktrace_unittest)
+    add_test (NAME stacktrace COMMAND stacktrace_unittest)
+  endif (TARGET stacktrace_unittest)
+
+  add_test (NAME stl_logging COMMAND stl_logging_unittest)
+
+  if (TARGET symbolize_unittest)
+    add_test (NAME symbolize COMMAND symbolize_unittest)
+  endif (TARGET symbolize_unittest)
+endif (BUILD_TESTING)
 
 install (TARGETS glog
   EXPORT glog-targets
@@ -546,44 +560,24 @@ install (TARGETS glog
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
 
-# Build tree config
-
-set (glog_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set (glog_PACKAGE_DEPS)
-
 if (gflags_FOUND)
-  set (glog_PACKAGE_DEPS
-"
-include (CMakeFindDependencyMacro)
-
-find_dependency (gflags ${gflags_VERSION})
-")
+  set (gflags_DEPENDENCY "find_dependency (gflags ${gflags_VERSION})")
 endif (gflags_FOUND)
 
 configure_package_config_file (glog-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/glog-config.cmake INSTALL_DESTINATION
-  lib/cmake/glog PATH_VARS glog_INCLUDE_DIR
+  ${CMAKE_CURRENT_BINARY_DIR}/glog-config.cmake
+  INSTALL_DESTINATION lib/cmake/glog
   NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
-# The version file is the same both for build tree and install mode config
 write_basic_package_version_file (glog-config-version.cmake VERSION
   ${GLOG_VERSION} COMPATIBILITY SameMajorVersion)
 
-# Install config
-
-set (glog_INCLUDE_DIR include)
-
-configure_package_config_file (glog-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/glog-config.cmake
-  INSTALL_DESTINATION lib/cmake/glog PATH_VARS glog_INCLUDE_DIR
-  NO_CHECK_REQUIRED_COMPONENTS_MACRO)
-
-export (TARGETS glog FILE glog-targets.cmake)
+export (TARGETS glog NAMESPACE glog:: FILE glog-targets.cmake)
 export (PACKAGE glog)
 
 install (FILES
-  ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/glog-config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/glog-config.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/glog-config-version.cmake
   DESTINATION lib/cmake/glog)
 
-install (EXPORT glog-targets DESTINATION lib/cmake/glog)
+install (EXPORT glog-targets NAMESPACE glog:: DESTINATION lib/cmake/glog)

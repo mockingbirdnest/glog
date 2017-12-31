@@ -36,6 +36,7 @@
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 # define OS_WINDOWS
+# define USE_CHROMIUM_SYMBOLIZE
 #elif defined(__CYGWIN__) || defined(__CYGWIN32__)
 # define OS_CYGWIN
 #elif defined(linux) || defined(__linux) || defined(__linux__)

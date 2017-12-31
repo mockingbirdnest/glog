@@ -69,6 +69,12 @@
     <ClCompile Include="..\..\..\chromium\base\synchronization\lock.cc">
       <Filter>Chromium Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\demangle.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\signalhandler.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\base\commandlineflags.h">
@@ -171,6 +177,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\symbolize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\demangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -844,7 +844,36 @@ static ATTRIBUTE_NOINLINE bool SymbolizeAndDemangle(void *pc, char *out,
 
 _END_GOOGLE_NAMESPACE_
 
-#elif defined(OS_WINDOWS)
+#elif defined(OS_WINDOWS) 
+
+# if defined(USE_CHROMIUM_SYMBOLIZE)
+
+#include <string.h>
+#include "base/debug/stack_trace.h"
+
+_START_GOOGLE_NAMESPACE_
+
+static ATTRIBUTE_NOINLINE bool SymbolizeAndDemangle(void *pc, char *out,
+                                                    int out_size) {
+  const std::string prefix = "Backtrace:\n";
+  const std::string postfix = "\n";
+  void* stack[1];
+  stack[0] = pc;
+  ::base::debug::StackTrace stack_trace(stack, 1);
+  std::string symbol = stack_trace.ToString();
+  if (symbol.substr(0, prefix.size()) == prefix) {
+    symbol = symbol.substr(prefix.size());
+  }
+  if (symbol.substr(symbol.size() - postfix.size()) == postfix) {
+    symbol = symbol.substr(0, symbol.size() - postfix.size());
+  }
+  strcpy(out, symbol.c_str());
+  return true;
+}
+
+_END_GOOGLE_NAMESPACE_
+
+# else
 
 #include <DbgHelp.h>
 #pragma comment(lib, "DbgHelp")
@@ -905,33 +934,7 @@ static ATTRIBUTE_NOINLINE bool SymbolizeAndDemangle(void *pc, char *out,
 
 _END_GOOGLE_NAMESPACE_
 
-#elif defined(OS_WINDOWS)
-
-#include <string.h>
-#include "base/debug/stack_trace.h"
-
-_START_GOOGLE_NAMESPACE_
-
-static ATTRIBUTE_NOINLINE bool SymbolizeAndDemangle(void *pc, char *out,
-                                                    int out_size) {
-  const std::string prefix = "Backtrace:\n";
-  const std::string postfix = "\n";
-  void* stack[1];
-  stack[0] = pc;
-  ::base::debug::StackTrace stack_trace(stack, 1);
-  std::string symbol = stack_trace.ToString();
-  if (symbol.substr(0, prefix.size()) == prefix) {
-    symbol = symbol.substr(prefix.size());
-  }
-  if (symbol.substr(symbol.size() - postfix.size()) == postfix) {
-    symbol = symbol.substr(0, symbol.size() - postfix.size());
-  }
-  strcpy(out, symbol.c_str());
-  return true;
-}
-
-_END_GOOGLE_NAMESPACE_
-
+# endif
 #else
 # error BUG: HAVE_SYMBOLIZE was wrongly set
 #endif

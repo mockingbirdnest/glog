@@ -2096,6 +2096,8 @@ LogMessageFatal::LogMessageFatal(const char* file, int line,
                                  const CheckOpString& result) :
     LogMessage(file, line, result) {}
 
+#pragma warning(push)
+#pragma warning(disable : 4722)
 LogMessageFatal::~LogMessageFatal() {
   if (FLAGS_log_backtrace_on_fatal) {
     std::string stacktrace;
@@ -2106,6 +2108,7 @@ LogMessageFatal::~LogMessageFatal() {
   Flush();
   LogMessage::Fail();
 }
+#pragma warning(pop)
 
 namespace base {
 

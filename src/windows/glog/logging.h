@@ -1195,13 +1195,14 @@ public:
     // http://msdn.microsoft.com/en-us/library/esew7y1w.aspx
     // Let's just ignore the warning.
 #ifdef _MSC_VER
+# pragma warning(push)
 # pragma warning(disable: 4251)
 #endif
     LogStream(const LogStream&);
     LogStream& operator=(const LogStream&);
     base_logging::LogStreamBuf streambuf_;
 #ifdef _MSC_VER
-# pragma warning(default: 4251)
+# pragma warning(pop)
 #endif
     int ctr_;  // Counter hack (for the LOG_EVERY_X() macro)
     LogStream *self_;  // Consistency check hack

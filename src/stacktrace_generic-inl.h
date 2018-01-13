@@ -38,7 +38,7 @@
 _START_GOOGLE_NAMESPACE_
 
 // If you change this function, also change GetStackFrames below.
-size_t GetStackTrace(void** result, size_t max_depth, int skip_count) {
+int GetStackTrace(void** result, int max_depth, int skip_count) {
   static const int kStackLength = 64;
   void * stack[kStackLength];
   int size;

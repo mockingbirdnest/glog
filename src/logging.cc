@@ -33,6 +33,7 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <algorithm>
 #include <iomanip>
 #include <string>
 #ifdef HAVE_UNISTD_H
@@ -177,6 +178,9 @@ GLOG_DEFINE_bool(stop_logging_if_full_disk, false,
 
 GLOG_DEFINE_string(log_backtrace_at, "",
                    "Emit a backtrace when logging at file:linenum.");
+
+GLOG_DEFINE_bool(log_backtrace_on_fatal, true,
+                 "Emit a backtrace to the fatal file.");
 
 // TODO(hamaji): consider windows
 #define PATH_SEPARATOR '/'
@@ -452,6 +456,7 @@ class LogFileObject : public base::Logger {
 class LogDestination {
  public:
   friend class LogMessage;
+  friend class LogMessageFatal;
   friend void ReprintFatalMessage();
   friend base::Logger* base::GetLogger(LogSeverity);
   friend void base::SetLogger(LogSeverity, base::Logger*);
@@ -1314,6 +1319,10 @@ ostream& LogMessage::stream() {
   return data_->stream_;
 }
 
+time_t LogMessage::timestamp() const {
+  return data_->timestamp_;
+}
+
 // Flush buffered message, called by the destructor, or any other function
 // that needs to synchronize the log.
 void LogMessage::Flush() {
@@ -2093,8 +2102,14 @@ LogMessageFatal::LogMessageFatal(const char* file, int line,
     LogMessage(file, line, result) {}
 
 LogMessageFatal::~LogMessageFatal() {
-    Flush();
-    LogMessage::Fail();
+  if (FLAGS_log_backtrace_on_fatal) {
+    std::string stacktrace;
+    DumpStackTraceToString(&stacktrace);
+    LogDestination::LogToAllLogfiles(
+        GLOG_FATAL, timestamp(), stacktrace.c_str(), stacktrace.size());
+  }
+  Flush();
+  LogMessage::Fail();
 }
 
 namespace base {
@@ -2149,6 +2164,10 @@ void MakeCheckOpValueString(std::ostream* os, const unsigned char& v) {
 
 void InitGoogleLogging(const char* argv0) {
   glog_internal_namespace_::InitGoogleLoggingUtilities(argv0);
+}
+
+bool IsGoogleLoggingInitialized() {
+  return glog_internal_namespace_::IsGoogleLoggingInitialized();
 }
 
 void ShutdownGoogleLogging() {

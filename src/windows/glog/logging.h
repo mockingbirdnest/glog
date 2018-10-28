@@ -520,6 +520,8 @@ namespace google {
 // specified by argv0 in log outputs.
 GOOGLE_GLOG_DLL_DECL void InitGoogleLogging(const char* argv0);
 
+GOOGLE_GLOG_DLL_DECL bool IsGoogleLoggingInitialized();
+
 // Shutdown google's logging library.
 GOOGLE_GLOG_DLL_DECL void ShutdownGoogleLogging();
 
@@ -1171,6 +1173,10 @@ public:
       rdbuf(&streambuf_);
     }
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1900)
+    LogStream(LogStream&&) = delete;
+#endif
+
     int ctr() const { return ctr_; }
     void set_ctr(int ctr) { ctr_ = ctr; }
     LogStream* self() const { return self_; }
@@ -1182,9 +1188,21 @@ public:
     void reset() { streambuf_.reset(); }
 
   private:
+    // LogStream inherit from non-DLL-exported class (std::ostrstream)
+    // and VC++ produces a warning for this situation.
+    // However, MSDN says "C4251 can be ignored if you are deriving from a type
+    // in the Standard C++ Library"
+    // http://msdn.microsoft.com/en-us/library/esew7y1w.aspx
+    // Let's just ignore the warning.
+#ifdef _MSC_VER
+# pragma warning(disable: 4251)
+#endif
     LogStream(const LogStream&);
     LogStream& operator=(const LogStream&);
     base_logging::LogStreamBuf streambuf_;
+#ifdef _MSC_VER
+# pragma warning(default: 4251)
+#endif
     int ctr_;  // Counter hack (for the LOG_EVERY_X() macro)
     LogStream *self_;  // Consistency check hack
   };
@@ -1261,6 +1279,9 @@ public:
   static int64 num_messages(int severity);
 
   struct LogMessageData;
+
+protected:
+  time_t timestamp() const;
 
 private:
   // Fully internal SendMethod cases:

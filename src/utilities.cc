@@ -140,7 +140,7 @@ static void DumpStackTrace(int skip_count, DebugWriter *writerfn, void *arg) {
 }
 
 static void DumpStackTraceAndExit() {
-  DumpStackTrace(1, DebugWriteToStderr, NULL);
+  DumpStackTrace(4, DebugWriteToStderr, NULL);
 
   // TOOD(hamaji): Use signal instead of sigaction?
   if (IsFailureSignalHandlerInstalled()) {

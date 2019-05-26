@@ -159,7 +159,7 @@ void RawLog__(LogSeverity severity, const char* file, int line,
       crash_reason.message = crash_buf;
 #ifdef HAVE_STACKTRACE
       crash_reason.depth =
-          GetStackTrace(crash_reason.stack, ARRAYSIZE(crash_reason.stack), 1);
+          GetStackTrace(crash_reason.stack, ARRAYSIZE(crash_reason.stack), 0);
 #else
       crash_reason.depth = 0;
 #endif

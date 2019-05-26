@@ -1495,7 +1495,7 @@ void LogMessage::RecordCrashReason(
                     fatal_msg_data_exclusive.num_prefix_chars_;
 #ifdef HAVE_STACKTRACE
   // Retrieve the stack trace, omitting the logging frames that got us here.
-  reason->depth = GetStackTrace(reason->stack, ARRAYSIZE(reason->stack), 4);
+  reason->depth = GetStackTrace(reason->stack, ARRAYSIZE(reason->stack), 0);
 #else
   reason->depth = 0;
 #endif

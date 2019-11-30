@@ -268,7 +268,7 @@ static pthread_t* g_entered_thread_id_pointer = NULL;
 // Dumps signal and stack frame information, and invokes the default
 // signal handler once our job is done.
 #if defined(OS_WINDOWS)
-void FailureSignalHandler(int signal_number)
+void __cdecl FailureSignalHandler(int signal_number)
 #else
 void FailureSignalHandler(int signal_number,
                           siginfo_t *signal_info,

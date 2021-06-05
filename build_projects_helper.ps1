@@ -76,7 +76,7 @@ $dirfilterspath = [string]::format("{0}\glog_vcxproj_filters.txt", $dir)
     $filtersheaders + $filterssources,
     [system.text.encoding]::utf8)
 
-$testsfilterspath = [string]::format("{0}\glog_tests_vcxproj_filters.txt", $dir)
+$testsfilterspath = [string]::format("{0}\tests_vcxproj_filters.txt", $dir)
 [system.io.file]::writealltext(
     $testsfilterspath,
     $filterstests,
@@ -88,7 +88,7 @@ $dirvcxprojpath = [string]::format("{0}\glog_vcxproj.txt", $dir)
     $vcxprojheaders + $vcxprojsources,
     [system.text.encoding]::utf8)
 
-$testsvcxprojpath = [string]::format("{0}\glog_tests_vcxproj.txt", $dir)
+$testsvcxprojpath = [string]::format("{0}\tests_vcxproj.txt", $dir)
 [system.io.file]::writealltext(
     $testsvcxprojpath,
     $vcxprojtests,

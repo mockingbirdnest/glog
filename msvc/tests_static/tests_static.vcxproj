@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{8D239615-A785-4EF4-846F-D171BE2B028B}</ProjectGuid>
+    <RootNamespace>algorithm</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)glog.props" />
+  <ItemGroup>
+    <ClInclude Include="..\..\src\config_for_unittests.h" />
+    <ClInclude Include="..\..\src\googletest.h" />
+    <ClCompile Include="..\..\src\logging_unittest.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\glog_static\glog_static.vcxproj">
+      <Project>{25d4efd2-4e72-4576-a493-7528d2636873}</Project>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

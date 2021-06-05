@@ -76,8 +76,4 @@ packages/debian-*
 CMakeCache.txt
 CMakeFiles/
 *.cmake
-config.h
-*.sln
-*.vcxproj
-*.filters
 bazel-*

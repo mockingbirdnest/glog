@@ -1,0 +1,100 @@
+  <ItemGroup>
+    <ClCompile Include="..\..\..\chromium\base\debug\stack_trace.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\debug\stack_trace_win.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\process\launch_win.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\files\file_path.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\strings\string_util.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\synchronization\lock.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\files\file_path_constants.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\memory\singleton.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\synchronization\lock_impl_win.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\strings\string_util_constants.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\threading\platform_thread_win.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\chromium\base\strings\string_piece.cc">
+      <Filter>Chromium Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\chromium\base\debug\stack_trace.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\base_export.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\build\build_config.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\basictypes.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\memory\singleton.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\files\file_path.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\process\launch.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\macros.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\port.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\strings\string_util.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\synchronization\lock.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\synchronization\lock_impl.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\strings\string_piece.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\atomicops.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\memory\aligned_memory.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\third_party\dynamic_annotations\dynamic_annotations.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\threading\platform_thread.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\compiler_specific.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\strings\string16.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\chromium\base\strings\string_util_win.h">
+      <Filter>Chromium Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>

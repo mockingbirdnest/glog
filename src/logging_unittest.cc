@@ -174,7 +174,7 @@ static void BM_vlog(int n) {
 }
 BENCHMARK(BM_vlog);
 
-int main(int argc, char **argv) {
+int __cdecl main(int argc, char **argv) {
   FLAGS_colorlogtostderr = false;
 #ifdef HAVE_LIB_GFLAGS
   ParseCommandLineFlags(&argc, &argv, true);
@@ -222,7 +222,8 @@ int main(int argc, char **argv) {
 
   // TODO: The golden test portion of this test is very flakey.
   EXPECT_TRUE(
-      MungeAndDiffTestStderr(FLAGS_test_srcdir + "/src/logging_unittest.err"));
+      MungeAndDiffTestStderr(FLAGS_test_srcdir +
+                             "../src/logging_unittest.err"));
 
   FLAGS_logtostderr = false;
 

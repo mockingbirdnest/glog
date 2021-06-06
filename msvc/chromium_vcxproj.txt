@@ -1,0 +1,36 @@
+  <ItemGroup>
+    <ClCompile Include="..\..\..\chromium\base\debug\stack_trace.cc" />
+    <ClCompile Include="..\..\..\chromium\base\debug\stack_trace_win.cc" />
+    <ClCompile Include="..\..\..\chromium\base\files\file_path.cc" />
+    <ClCompile Include="..\..\..\chromium\base\files\file_path_constants.cc" />
+    <ClCompile Include="..\..\..\chromium\base\memory\singleton.cc" />
+    <ClCompile Include="..\..\..\chromium\base\process\launch_win.cc" />
+    <ClCompile Include="..\..\..\chromium\base\strings\string_piece.cc" />
+    <ClCompile Include="..\..\..\chromium\base\strings\string_util.cc" />
+    <ClCompile Include="..\..\..\chromium\base\strings\string_util_constants.cc" />
+    <ClCompile Include="..\..\..\chromium\base\synchronization\lock.cc" />
+    <ClCompile Include="..\..\..\chromium\base\synchronization\lock_impl_win.cc" />
+    <ClCompile Include="..\..\..\chromium\base\threading\platform_thread_win.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\chromium\base\atomicops.h" />
+    <ClInclude Include="..\..\..\chromium\base\base_export.h" />
+    <ClInclude Include="..\..\..\chromium\base\basictypes.h" />
+    <ClInclude Include="..\..\..\chromium\base\compiler_specific.h" />
+    <ClInclude Include="..\..\..\chromium\base\debug\stack_trace.h" />
+    <ClInclude Include="..\..\..\chromium\base\files\file_path.h" />
+    <ClInclude Include="..\..\..\chromium\base\macros.h" />
+    <ClInclude Include="..\..\..\chromium\base\memory\aligned_memory.h" />
+    <ClInclude Include="..\..\..\chromium\base\memory\singleton.h" />
+    <ClInclude Include="..\..\..\chromium\base\port.h" />
+    <ClInclude Include="..\..\..\chromium\base\process\launch.h" />
+    <ClInclude Include="..\..\..\chromium\base\strings\string16.h" />
+    <ClInclude Include="..\..\..\chromium\base\strings\string_piece.h" />
+    <ClInclude Include="..\..\..\chromium\base\strings\string_util.h" />
+    <ClInclude Include="..\..\..\chromium\base\strings\string_util_win.h" />
+    <ClInclude Include="..\..\..\chromium\base\synchronization\lock.h" />
+    <ClInclude Include="..\..\..\chromium\base\synchronization\lock_impl.h" />
+    <ClInclude Include="..\..\..\chromium\base\third_party\dynamic_annotations\dynamic_annotations.h" />
+    <ClInclude Include="..\..\..\chromium\base\threading\platform_thread.h" />
+    <ClInclude Include="..\..\..\chromium\build\build_config.h" />
+  </ItemGroup>

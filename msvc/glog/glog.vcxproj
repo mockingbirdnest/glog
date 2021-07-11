@@ -15,6 +15,7 @@
     <ClInclude Include="..\..\src\windows\glog\raw_logging.h" />
     <ClInclude Include="..\..\src\windows\glog\stl_logging.h" />
     <ClInclude Include="..\..\src\windows\glog\vlog_is_on.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\base\commandlineflags.h" />
@@ -81,5 +82,8 @@
     <ClInclude Include="..\..\..\chromium\base\third_party\dynamic_annotations\dynamic_annotations.h" />
     <ClInclude Include="..\..\..\chromium\base\threading\platform_thread.h" />
     <ClInclude Include="..\..\..\chromium\build\build_config.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="glog.rc" />
   </ItemGroup>
 </Project>

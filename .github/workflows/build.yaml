@@ -27,14 +27,10 @@ jobs:
       shell: pwsh
 
     - name: Download chromium artifacts
-      uses: dawidd6/action-download-artifact@v2
+      uses: mockingbirdnest/actions/windows/download_artifact@WF
       with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        workflow: build.yaml
-        workflow_conclusion: success
         name: chromium
-        path: ${{ github.workspace }}\..\chromium
-        repo: mockingbirdnest/chromium
+        repository: chromium
 
     - name: Find MSBuild
       uses: mockingbirdnest/actions/windows/find_msbuild@main

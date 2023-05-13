@@ -22,8 +22,9 @@ jobs:
 
     - name: Trace
       run: |
-        echo ${{ env.GITHUB_WORKSPACE }}
+        echo $env:GITHUB_WORKSPACE
         tree /f .
+      shell: pwsh
 
     - name: Download chromium artifacts
       uses: dawidd6/action-download-artifact@v2

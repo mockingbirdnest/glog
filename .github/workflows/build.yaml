@@ -20,12 +20,6 @@ jobs:
     - name: Checkout source files
       uses: actions/checkout@v3
 
-    - name: Trace
-      run: |
-        echo ${{ github.workspace }}
-        tree /f .
-      shell: pwsh
-
     - name: Download chromium artifacts
       uses: mockingbirdnest/actions/windows/download_artifact@WF
       with:

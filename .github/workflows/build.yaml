@@ -22,8 +22,7 @@ jobs:
 
     - name: Trace
       run: |
-        echo "${{ github.workspace }}"
-        ls ${{ github.workspace }}\..\chromium
+        echo ${{ github.workspace }}
         tree /f .
       shell: pwsh
 
@@ -33,7 +32,7 @@ jobs:
         github_token: ${{secrets.GITHUB_TOKEN}}
         workflow: build.yaml
         workflow_conclusion: success
-        name: chromium
+        name: ${{ github.workspace }}\..\chromium
         path: ${env::chromium
         repo: mockingbirdnest/chromium
 

@@ -30,7 +30,6 @@ jobs:
       uses: mockingbirdnest/actions/windows/download_artifact@WF
       with:
         name: chromium
-        repository: chromium
 
     - name: Find MSBuild
       uses: mockingbirdnest/actions/windows/find_msbuild@main

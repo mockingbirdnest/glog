@@ -20,6 +20,11 @@ jobs:
     - name: Checkout source files
       uses: actions/checkout@v3
 
+    - name: Trace
+      run: |
+        echo ${{ env.GITHUB_WORKSPACE }}
+        tree /f .
+
     - name: Download chromium artifacts
       uses: dawidd6/action-download-artifact@v2
       with:

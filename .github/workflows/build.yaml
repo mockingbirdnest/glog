@@ -32,8 +32,8 @@ jobs:
         github_token: ${{secrets.GITHUB_TOKEN}}
         workflow: build.yaml
         workflow_conclusion: success
-        name: ${{ github.workspace }}\..\chromium
-        path: ${env::chromium
+        name: chromium
+        path: ${{ github.workspace }}\..\chromium
         repo: mockingbirdnest/chromium
 
     - name: Find MSBuild

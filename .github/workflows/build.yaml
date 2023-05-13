@@ -27,6 +27,7 @@ jobs:
         workflow: build.yaml
         workflow_conclusion: success
         name: chromium
+        path: chromium
         repo: mockingbirdnest/chromium
 
     - name: Find MSBuild

@@ -23,7 +23,7 @@ jobs:
     - name: Trace
       run: |
         echo "${{ github.workspace }}"
-        echo (get-item "${{ github.workspace }}").parent.fullname + '\chromium'
+        ls ${{ github.workspace }}\..\chromium
         tree /f .
       shell: pwsh
 

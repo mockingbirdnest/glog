@@ -20,6 +20,11 @@ jobs:
     - name: Checkout source files
       uses: actions/checkout@v3
 
+    - name: Initialize build environment
+      uses: mockingbirdnest/actions/windows/initialize_build@WF
+      with:
+        configuration: ${{ matrix.configuration }}
+
     - name: Download chromium artifact
       uses: dawidd6/action-download-artifact@v2
       with:
@@ -27,13 +32,8 @@ jobs:
         workflow: build.yaml
         workflow_conclusion: success
         name: chromium
-        path: ${{ github.workspace }}/chromium
+        path: ${{ github.workspace }}/../chromium
         repo: mockingbirdnest/chromium
-
-    - name: Initialize build environment
-      uses: mockingbirdnest/actions/windows/initialize_build@WF
-      with:
-        configuration: ${{ matrix.configuration }}
 
     - name: Rebuild ${{ matrix.configuration }}
       uses: mockingbirdnest/actions/windows/rebuild@main

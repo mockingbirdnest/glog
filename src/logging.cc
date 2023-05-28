@@ -2173,6 +2173,12 @@ bool IsGoogleLoggingInitialized() {
   return glog_internal_namespace_::IsGoogleLoggingInitialized();
 }
 
+std::string GetStackTrace() {
+  std::string stack;
+  DumpStackTraceToString(&stack);
+  return stack;
+}
+
 void ShutdownGoogleLogging() {
   glog_internal_namespace_::ShutdownGoogleLoggingUtilities();
   LogDestination::DeleteLogDestinations();

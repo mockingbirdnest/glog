@@ -522,6 +522,8 @@ GOOGLE_GLOG_DLL_DECL void InitGoogleLogging(const char* argv0);
 
 GOOGLE_GLOG_DLL_DECL bool IsGoogleLoggingInitialized();
 
+GOOGLE_GLOG_DLL_DECL std::string GetStackTrace();
+
 // Shutdown google's logging library.
 GOOGLE_GLOG_DLL_DECL void ShutdownGoogleLogging();
 

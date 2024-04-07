@@ -46,5 +46,6 @@ jobs:
       uses: mockingbirdnest/actions/windows/upload_artifact@main
       with:
         name: glog
+        configuration: ${{ matrix.configuration }}
         headers_directory: ${{ env.PRINCIPIA_HEADERS_GLOG }}
         solution_directory: ${{ env.PRINCIPIA_MSVC_GLOG }}
